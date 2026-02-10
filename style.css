@@ -1,0 +1,20 @@
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #334155;
+    padding: 8px;
+}
+
+.CRITICAL { background: #7f1d1d; }
+.HIGH { background: #9a3412; }
+.MEDIUM { background: #854d0e; }
+.LOW { background: #14532d; }
