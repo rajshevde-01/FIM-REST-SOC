@@ -36,7 +36,7 @@ Evade detection by avoiding malware drops
 
 👉 File & Registry Integrity Monitoring detects these stealthy attacks early, even when no malware is present.
 
-This tool demonstrates defensive detection, not offensive exploitation.
+This tool demonstrates defensive detection, not offensive exploitation
 
 🧱 Architecture
            ┌────────────┐
