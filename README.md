@@ -37,24 +37,45 @@ Evade detection by avoiding malware drops
 👉 File & Registry Integrity Monitoring detects these stealthy attacks early, even when no malware is present.
 
 This tool demonstrates defensive detection, not offensive exploitation
-
-🧱 Architecture
            ┌────────────┐
            │  FIM Agent │
            │ (Windows)  │
            └─────┬──────┘
-                 │ REST API (JSON alerts)
+                 │  Sends JSON alerts via REST API
                  ▼
         ┌───────────────────┐
         │   Flask Server     │
         │  Alert Processing │
         └─────┬─────────────┘
-              │
+              │ Stores in SQLite
               ▼
      ┌─────────────────────┐
      │ Web Dashboard (UI)  │
-     │ SQLite Alert Store  │
+     │  View alerts & MITRE│
      └─────────────────────┘
+FIM Agent
+
+Monitors files and Windows Registry
+
+Detects creation, modification, deletion
+
+Sends real-time alerts via REST API
+
+Flask Server
+
+Receives alerts
+
+Stores them in SQLite database
+
+Maps events to MITRE ATT&CK and severity
+
+Web Dashboard
+
+Displays all alerts
+
+Color-coded severity
+
+Timeline view for SOC analysts
 
 ✨ Key Features
 🔍 File Integrity Monitoring
@@ -120,25 +141,27 @@ Timeline view
 
 Centralized visibility
 
-📁 Project Structure
 FIM-REST/
 │
-├── agent/
-│   ├── agent.py              # Main FIM agent
-│   ├── config.py             # Agent configuration
-│   ├── hasher.py             # SHA-256 hashing
-│   ├── monitor.py            # File monitoring
-│   └── registry_monitor.py   # Windows Registry FIM
+├── agent/                      # FIM agent code
+│   ├── agent.py                # Main agent script (File + Registry FIM)
+│   ├── config.py               # Agent configuration
+│   ├── hasher.py               # SHA-256 file hashing
+│   ├── monitor.py              # File monitoring logic
+│   └── registry_monitor.py     # Windows Registry monitoring
 │
-├── monitored/
-│   └── test.txt              # Sample monitored file
+├── monitored/                  # Sample monitored files
+│   └── test.txt
 │
-└── server/
-    ├── app.py                # Flask REST API + dashboard
-    ├── database.db           # SQLite alert database
-    ├── requirements.txt
-    ├── static/style.css
-    └── templates/dashboard.html
+└── server/                     # Flask REST API + dashboard
+    ├── app.py                  # Flask app (REST + dashboard)
+    ├── database.db             # SQLite alert database
+    ├── requirements.txt        # Python dependencies
+    ├── static/
+    │   └── style.css           # Dashboard styling
+    └── templates/
+        └── dashboard.html      # Dashboard HTML template
+
 
 ⚙️ Installation & Setup
 🔹 Requirements
