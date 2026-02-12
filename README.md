@@ -1,83 +1,53 @@
 # FIM-REST-SOC
 File & Windows Registry Integrity Monitoring System (Web + Agent)
 
-A REST-based File Integrity Monitoring (FIM) solution with agent-server architecture, real-time alerts, Windows Registry monitoring, MITRE ATT&CK mapping, and a web dashboard, designed from a Blue Team / SOC Analyst perspective.
+A REST-based File Integrity Monitoring (FIM) solution with agent-server architecture, real-time alerts, Windows Registry monitoring, MITRE ATT&CK mapping, and a web dashboard built for Blue Team / SOC workflows.
 
-## Project Overview
-FIM-REST continuously monitors:
+## Overview
+FIM-REST monitors:
 
-- Critical files & directories
+- Critical files and directories
 - Windows Registry persistence locations
-- Unauthorized changes, deletions, or creations
+- Unauthorized creations, modifications, and deletions
 
 All events are:
 
 - Hash-verified (SHA-256)
 - Sent to a central REST API
-- Logged and visualized on a web dashboard
+- Stored in SQLite
+- Visualized in a web dashboard
 - Mapped to MITRE ATT&CK techniques
 
-This simulates how enterprise FIM tools (Tripwire, Wazuh, OSSEC) operate in real SOC environments.
-
-## Why This Tool Exists (Purpose)
-Attackers often:
-
-- Modify system files
-- Add registry persistence keys
-- Deface web files
-- Evade detection by avoiding malware drops
-
-File & Registry Integrity Monitoring detects these stealthy attacks early, even when no malware is present.
-
-This tool demonstrates defensive detection, not offensive exploitation.
-
-Architecture (high level):
-
-+------------+
-|  FIM Agent |
-| (Windows)  |
-+-----+------+
-      |  Sends JSON alerts via REST API
-      v
-+------------------+
-|   Flask Server   |
-|  Alert Handling  |
-+-----+------------+
-      | Stores in SQLite
-      v
-+---------------------+
-| Web Dashboard (UI)  |
-| View alerts & MITRE |
-+---------------------+
+## Architecture
++------------+         REST JSON          +------------------+        SQLite        +---------------------+
+|  FIM Agent |  ----------------------->  |   Flask Server   |  ----------------->   | Web Dashboard (UI)  |
+| (Windows)  |                             |  Alert Handling  |                      | Alerts and MITRE    |
++------------+                             +------------------+                      +---------------------+
 
 ## Components
-### FIM Agent
-- Monitors files and Windows Registry
-- Detects creation, modification, deletion
-- Sends real-time alerts via REST API
+### Agent
+- File integrity monitoring (create/modify/delete)
+- Registry monitoring for persistence keys
+- REST alert emission (JSON)
 
-### Flask Server
-- Receives alerts
-- Stores them in SQLite database
-- Maps events to MITRE ATT&CK and severity
+### Server
+- Receives alerts via REST API
+- Persists alerts in SQLite
+- Adds severity and MITRE mappings
 
-### Web Dashboard
-- Displays all alerts
-- Color-coded severity
-- Timeline view for SOC analysts
+### Dashboard
+- SOC-style alert table
+- Severity indicators
+- Timeline view
 
 ## Key Features
 ### File Integrity Monitoring
-Detects:
+- Baseline hashing with SHA-256
+- Drift detection for modifications
+- Creation and deletion tracking
 
-- File creation
-- File modification
-- File deletion
-
-Uses SHA-256 hashing and baseline vs drift detection.
-
-### Windows Registry Monitoring (Advanced)
-Monitors persistence-related registry keys:
+### Windows Registry Monitoring
+Monitors persistence-related keys:
 
 - HKCU\Software\Microsoft\Windows\CurrentVersion\Run
 - RunOnce
@@ -85,22 +55,14 @@ Monitors persistence-related registry keys:
 Detects:
 
 - Registry value creation
-- Registry modification
-- Registry deletion
+- Registry value modification
+- Registry value deletion
 
-Mapped to:
+Maps to:
 
-- MITRE ATT&CK T1547 - Boot or Logon Autostart Execution
-
-### Real-Time Alerts
-- CLI alerts on agent
-- REST alerts to server
-- Stored centrally
-- Viewable in web dashboard
+- MITRE ATT&CK T1547 (Boot or Logon Autostart Execution)
 
 ### MITRE ATT&CK Mapping
-Each alert is mapped to tactics & techniques:
-
 | Detection             | MITRE Technique |
 |-----------------------|-----------------|
 | Registry persistence  | T1547           |
@@ -108,35 +70,25 @@ Each alert is mapped to tactics & techniques:
 | Web file modification | T1491           |
 | File discovery        | T1083           |
 
-### Web Dashboard
-- SOC-style alert table
-- Severity classification
-- Timeline view
-- Centralized visibility
-
 ## Repository Structure
 FIM-REST/
-|
-|-- agent/                      # FIM agent code
-|   |-- agent.py                # Main agent script (File + Registry FIM)
-|   |-- config.py               # Agent configuration
-|   |-- hasher.py               # SHA-256 file hashing
-|   |-- monitor.py              # File monitoring logic
-|   `-- registry_monitor.py     # Windows Registry monitoring
-|
-|-- monitored/                  # Sample monitored files
+|-- agent/
+|   |-- agent.py
+|   |-- config.py
+|   |-- hasher.py
+|   |-- monitor.py
+|   `-- registry_monitor.py
+|-- monitored/
 |   `-- test.txt
-|
-`-- server/                     # Flask REST API + dashboard
-    |-- app.py                  # Flask app (REST + dashboard)
-    |-- database.db             # SQLite alert database
-    |-- requirements.txt        # Python dependencies
+`-- server/
+    |-- app.py
+    |-- requirements.txt
     |-- static/
-    |   `-- style.css           # Dashboard styling
+    |   `-- style.css
     `-- templates/
-        `-- dashboard.html      # Dashboard HTML template
+        `-- dashboard.html
 
-## Installation & Setup
+## Installation and Setup
 ### Requirements
 - Python 3.9+
 - Windows OS (for registry monitoring)
@@ -144,34 +96,34 @@ FIM-REST/
 
 ### Clone Repository
 ```
-git clone https://github.com/rajshevde-01/FIM-REST.git
+git clone https://github.com/rajshevde-01/FIM-REST-SOC.git
 cd FIM-REST
 ```
 
-### Setup Server
+### Start Server
 ```
 cd server
 pip install -r requirements.txt
 python app.py
 ```
 
-Open dashboard:
+Dashboard:
 
 http://127.0.0.1:5000
 
-### Setup Agent
+### Start Agent
 ```
 cd agent
 python agent.py
 ```
 
-## Testing the Tool
+## Testing
 ### File Change Test
 ```
 echo "attack simulation" >> monitored/test.txt
 ```
 
-Expected output:
+Expected:
 
 ```
 [FILE ALERT] MODIFIED -> ../monitored/test.txt
@@ -189,8 +141,6 @@ Expected:
 [REG ALERT] CREATED -> HKCU\...\Run\EvilTest
 ```
 
-Dashboard updates instantly.
-
 ## Alert Example (JSON)
 ```
 {
@@ -203,26 +153,23 @@ Dashboard updates instantly.
 }
 ```
 
-## SOC Analyst Skills Demonstrated
-- File Integrity Monitoring (FIM)
+## Skills Demonstrated
+- File integrity monitoring (FIM)
 - Endpoint detection logic
 - Windows persistence detection
 - MITRE ATT&CK mapping
 - Agent-server architecture
 - REST API design
 - Alert triage concepts
-- Blue Team defensive mindset
 
-## Future Enhancements
-- Email / Slack alerts
+## Roadmap
+- Email or Slack alerts
 - Windows Services monitoring
 - Scheduled Task FIM
-- ELK / Splunk integration
+- ELK or Splunk integration
 - API key-based agent authentication
 - Dockerized deployment
 
 ## Disclaimer
 This project is for educational and defensive security purposes only.
 Do not deploy in production without hardening, authentication, and access controls.
-
-If you like this project, please give it a star on GitHub.
