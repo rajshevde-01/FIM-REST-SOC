@@ -3,6 +3,7 @@ File & Windows Registry Integrity Monitoring System (Web + Agent)
 
 A REST-based File Integrity Monitoring (FIM) solution with agent-server architecture, real-time alerts, Windows Registry monitoring, MITRE ATT&CK mapping, and a web dashboard built for Blue Team / SOC workflows.
 
+
 ## Overview
 FIM-REST monitors:
 
@@ -18,7 +19,7 @@ All events are:
 - Visualized in a web dashboard
 - Mapped to MITRE ATT&CK techniques
 
-## Architecture
+### Architecture
 +------------+         REST JSON          +------------------+        SQLite        +---------------------+
 |  FIM Agent |  ----------------------->  |   Flask Server   |  ----------------->   | Web Dashboard (UI)  |
 | (Windows)  |                             |  Alert Handling  |                      | Alerts and MITRE    |
@@ -70,7 +71,7 @@ Maps to:
 | Web file modification | T1491           |
 | File discovery        | T1083           |
 
-## Repository Structure
+### Repository Structure
 FIM-REST/
 |-- agent/
 |   |-- agent.py
