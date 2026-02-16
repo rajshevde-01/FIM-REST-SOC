@@ -20,10 +20,12 @@ All events are:
 - Mapped to MITRE ATT&CK techniques
 
 ### Architecture
-+------------+         REST JSON          +------------------+        SQLite        +---------------------+
-|  FIM Agent |  ----------------------->  |   Flask Server   |  ----------------->   | Web Dashboard (UI)  |
-| (Windows)  |                             |  Alert Handling  |                      | Alerts and MITRE    |
-+------------+                             +------------------+                      +---------------------+
+```
+┌───────────────┐      REST JSON      ┌───────────────┐      SQLite      ┌────────────────────┐
+│   FIM Agent   │  ────────────────▶  │ Flask Server  │  ─────────────▶  │ Web Dashboard (UI) │
+│   (Windows)   │                    │ Alert Handler │                  │ Alerts & MITRE     │
+└───────────────┘                    └───────────────┘                  └────────────────────┘
+```
 
 ## Components
 ### Agent
@@ -64,30 +66,36 @@ Maps to:
 - MITRE ATT&CK T1547 (Boot or Logon Autostart Execution)
 
 ### MITRE ATT&CK Mapping
-| Detection             | MITRE Technique |
-|-----------------------|-----------------|
-| Registry persistence  | T1547           |
-| System file change    | T1548           |
-| Web file modification | T1491           |
-| File discovery        | T1083           |
+```
+┌─────────────────────────────┬────────────────────┐
+│ Detection                   │ MITRE Technique    │
+├─────────────────────────────┼────────────────────┤
+│ Registry persistence        │ T1547              │
+│ System file change          │ T1548              │
+│ Web file modification       │ T1491              │
+│ File discovery              │ T1083              │
+└─────────────────────────────┴────────────────────┘
+```
 
 ### Repository Structure
+```
 FIM-REST/
-|-- agent/
-|   |-- agent.py
-|   |-- config.py
-|   |-- hasher.py
-|   |-- monitor.py
-|   `-- registry_monitor.py
-|-- monitored/
-|   `-- test.txt
-`-- server/
-    |-- app.py
-    |-- requirements.txt
-    |-- static/
-    |   `-- style.css
-    `-- templates/
-        `-- dashboard.html
+├── agent/
+│   ├── agent.py
+│   ├── config.py
+│   ├── hasher.py
+│   ├── monitor.py
+│   └── registry_monitor.py
+├── monitored/
+│   └── test.txt
+└── server/
+  ├── app.py
+  ├── requirements.txt
+  ├── static/
+  │   └── style.css
+  └── templates/
+    └── dashboard.html
+```
 
 ## Installation and Setup
 ### Requirements
