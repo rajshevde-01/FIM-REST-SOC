@@ -1,7 +1,7 @@
 # FIM-REST-SOC
 File & Windows Registry Integrity Monitoring System (Web + Agent)
 
-A REST-based File Integrity Monitoring (FIM) solution with agent-server architecture, real-time alerts, Windows Registry monitoring, MITRE ATT&CK mapping, and a web dashboard built for Blue Team / SOC workflows.
+A REST-based File Integrity Monitoring (FIM) solution with agent-server architecture, real-time alerts, Windows Registry monitoring, MITRE ATT&CK mapping, and a web dashboard built for Blue Team/SOC workflows.
 
 
 ## Overview
